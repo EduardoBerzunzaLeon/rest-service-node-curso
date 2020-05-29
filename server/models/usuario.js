@@ -1,58 +1,57 @@
-
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let rolesValidos = {
-	values: ['ADMIN_ROLE', 'USER_ROLE'],
-	// {VALUE} - es el valor recibido del formulario
-	message: '{VALUE} no es un rol válido'
+    values: ['ADMIN_ROLE', 'USER_ROLE'],
+    // {VALUE} - es el valor recibido del formulario
+    message: '{VALUE} no es un rol válido'
 };
 
 let Schema = mongoose.Schema;
 
 let usuarioSchema = new Schema({
-	nombre: {
-		type: String,
-		required: [true, 'El nombre es necesario']
-	},
-	email: {
-		type: String,
-		unique: true,
-		required: [true, 'El correo es necesario']
-	},
-	password: {
-		type: String, 
-		required: [true, 'La contraseña es obligatoria']
-	},
-	img: {
-		type: String,
-		required: false
-	},
-	role: {
-		type: String,
-		default: 'USER_ROLE',
-		enum: rolesValidos
-	},
-	estado: {
-		type: Boolean,
-		default: true
-	},
-	google: {
-		type: Boolean,
-		default: false
-	}
+    nombre: {
+        type: String,
+        required: [true, 'El nombre es necesario']
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: [true, 'El correo es necesario']
+    },
+    password: {
+        type: String,
+        required: [true, 'La contraseña es obligatoria']
+    },
+    img: {
+        type: String,
+        required: false
+    },
+    role: {
+        type: String,
+        default: 'USER_ROLE',
+        enum: rolesValidos
+    },
+    estado: {
+        type: Boolean,
+        default: true
+    },
+    google: {
+        type: Boolean,
+        default: false
+    }
 });
 
 // El método toJSON siempre se llama cuando se intenta imprimir
 usuarioSchema.methods.toJSON = function() {
 
-	let user = this;
-	let userObject = user.toObject();
-	delete userObject.password;
+    let user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
 
-	return userObject;
+    return userObject;
 }
 
-usuarioSchema.plugin( uniqueValidator, { message: '{PATH} debe de ser único' } );
+usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
